@@ -1,0 +1,145 @@
+
+/usr/local/bin/sam build --template /private/var/folders/4f/v1znkz2x7p918l197_dc_jy8jvc7yp/T/template1.yaml --build-dir /private/var/folders/4f/v1znkz2x7p918l197_dc_jy8jvc7yp/T/lambdaBuild1
+
+Commands you can use next
+=========================
+[*] Invoke Function: sam local invoke -t ../../../../private/var/folders/4f/v1znkz2x7p918l197_dc_jy8jvc7yp/T/lambdaBuild1/template.yaml
+[*] Package: sam package --s3-bucket <yourbucket> --template-file ../../../../private/var/folders/4f/v1znkz2x7p918l197_dc_jy8jvc7yp/T/lambdaBuild1/template.yaml
+
+Not following: https://www.baeldung.com/aws-lambda-api-gateway
+https://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
+https://www.mkyong.com/maven/how-to-create-a-java-project-with-maven/
+
+Step-1: Create a maven project
+$ mvn archetype:generate -DgroupId=com.selim.app -DartifactId=lambda-app -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false -DarchetypeVersion=1.4
+
+[INFO] Using following parameters for creating project from Archetype: maven-archetype-quickstart:1.4
+[INFO] ----------------------------------------------------------------------------
+[INFO] Parameter: groupId, Value: com.selim.app
+[INFO] Parameter: artifactId, Value: lambda-app
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] Parameter: package, Value: com.selim.app
+[INFO] Parameter: packageInPathFormat, Value: com/selim/app
+[INFO] Parameter: version, Value: 1.0-SNAPSHOT
+[INFO] Parameter: package, Value: com.selim.app
+[INFO] Parameter: groupId, Value: com.selim.app
+[INFO] Parameter: artifactId, Value: lambda-app
+[INFO] Project created from Archetype in dir: /Users/mmmihm/Lambda/Java_Lambda/MavenLambda/lambda-app
+
+$ tree lambda-app/
+lambda-app/
+├── pom.xml
+└── src
+    ├── main
+    │   └── java
+    │       └── com
+    │           └── selim
+    │               └── app
+    │                   └── App.java
+    └── test
+        └── java
+            └── com
+                └── selim
+                    └── app
+                        └── AppTest.java
+
+
+
+Step-2: ======= add maven dependency to to generated pom.xml file =======
+<!-- https://mvnrepository.com/artifact/com.amazonaws/aws-lambda-java-core -->
+<dependency>
+   <groupId>com.amazonaws</groupId>
+   <artifactId>aws-lambda-java-core</artifactId>
+   <version>1.2.0</version>
+</dependency>
+
+Step-3: ====== Maven: Command to update repository after adding dependency to POM ======
+mvn install (or mvn package) will always work.
+
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 1 source file to /Users/mmmihm/Lambda/Java_Lambda/MavenLambda/lambda-app/target/classes
+
+[INFO] Building jar: /Users/mmmihm/Lambda/Java_Lambda/MavenLambda/lambda-app/target/lambda-app-1.0-SNAPSHOT.jar
+
+
+Step-4: ======= write your java classess =======
+Open the project in Intellij IDEA and right click on pom.xml -> Maven -> reimport
+https://stackoverflow.com/questions/35545642/error-executing-hello-world-for-aws-lambda-in-java
+
+package com.selim.app;
+
+//https://docs.aws.amazon.com/lambda/latest/dg/java-handler-io-type-pojo.html
+import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.RequestHandler;
+
+public class App implements RequestHandler<String, String> {
+    public String handleRequest(final String event, final Context context) {
+        System.out.println(event);
+        return "{ \"message\": \"hello world\" }";
+    }
+}
+
+Step-5: ===== Set Java compiler level to 8 in pom.xml file ======
+
+ <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+
+Step-6: mvn install or mvn package
+[INFO] Building jar: /Users/mmmihm/Lambda/Java_Lambda/MavenLambda/lambda-app/target/lambda-app-1.0-SNAPSHOT.jar
+
+Step-7: from AWS lambda console, create a lambda function for java 8 runtime; Upload jar file created in step-6
+
+Step-8: Change the Handler to correct one
+//==== (package.class::method-reference) as the handler
+//==== role-policy: allow logs:*
+
+Step-9: Create function using CLI
+aws lambda create-function --function-name LambdaFunctionHandler --zip-file fileb://target/lambda-app-1.0-SNAPSHOT.jar --handler com.selim.app.App::handleRequest --runtime java8 --description 'Lambda created by CLI' --role arn:aws:iam::251508406573:role/lambda-basic-role
+
+{
+    "FunctionName": "MavenLambdaJava",
+    "FunctionArn": "arn:aws:lambda:ap-southeast-2:251508406573:function:MavenLambdaJava",
+    "Runtime": "java8",
+    "Role": "arn:aws:iam::251508406573:role/lambda-basic-role",
+    "Handler": "com.selim.app.App::handleRequest",
+    "CodeSize": 2957,
+    "Description": "",
+    "Timeout": 3,
+    "MemorySize": 128,
+    "LastModified": "2019-08-20T12:12:49.680+0000",
+    "CodeSha256": "r5kAi63futbJ2Y1ZR4mAyHI2vpBYTjJuq+0gT9j1TvM=",
+    "Version": "$LATEST",
+    "TracingConfig": {
+        "Mode": "PassThrough"
+    },
+    "RevisionId": "047da423-a3f2-4e59-bc12-88ed2d127447"
+}
+
+
+
+Step-10: Test lambda function and check logs
+$ aws lambda invoke --function-name MavenLambdaJava out.txt --log-type Tail --query 'LogResult' --output text |  base64 -D
+
+
+$ aws lambda invoke --function-name lambda-java-idea out.txt --region us-east-1 --log-type Tail --query 'LogResult' --output text |  base64 -D
+START RequestId: 13fffda7-f011-4baf-9344-2d08c3b64fd8 Version: $LATEST
+{}
+Input: {}END RequestId: 13fffda7-f011-4baf-9344-2d08c3b64fd8
+REPORT RequestId: 13fffda7-f011-4baf-9344-2d08c3b64fd8  Duration: 11.68 ms  Billed Duration: 100 ms   Memory Size: 256 MB Max Memory Used: 87 MB  
+XRAY TraceId: 1-5d5bf59a-dc77bba4d3c82d44887ccce4 SegmentId: 21763b0700526a95
+
+
+$ aws lambda invoke --function-name LambdaFunctionHandler --payload '{"key": "value"}' out.txt --region ap-southeast-2 --log-type Tail --query 'LogResult' --output text |  base64 -D
+
+$ aws lambda invoke --invocation-type Event --function-name nodejs10 --payload file://test.json out.txt
+{
+    "StatusCode": 202
+}
+
+$ cat out.txt 
+"implements RequestHandler"
+
+

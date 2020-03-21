@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="lambda-app:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="b28b246d-4ad6-4d51-b85c-708dddf54ae8" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="importAutomatically" value="true" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1ZKbKk64bqAJXq04ImdtWVfaayr" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="b28b246d-4ad6-4d51-b85c-708dddf54ae8" name="Default Changelist" comment="" />
+      <created>1584590670981</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584590670981</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="498" y="182" key="Maven.ArtifactSearchDialog" timestamp="1584590818638">
+      <screen x="0" y="23" width="1920" height="995" />
+    </state>
+    <state x="498" y="182" key="Maven.ArtifactSearchDialog/1920.23.1440.877/0.23.1920.995@0.23.1920.995" timestamp="1584590818638" />
+    <state x="448" y="101" key="SettingsEditor" timestamp="1584592179234">
+      <screen x="0" y="23" width="1920" height="994" />
+    </state>
+    <state x="448" y="101" key="SettingsEditor/1920.23.1440.877/0.23.1920.994@0.23.1920.994" timestamp="1584592179234" />
+  </component>
+</project>
